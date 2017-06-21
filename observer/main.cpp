@@ -28,10 +28,20 @@ public:
     {
         _name = name;
     }
-    virtual void Notify(std::string param)
+    virtual void Notify(std::string param) override
     {
         std::cout<<_name<<" was notified with \""<<param<<"\" message!"<<std::endl;
     }
+};
+
+class Cook : public Observer
+{
+public:
+    virtual void Notify(std::string param) override
+    {
+        std::cout<<"Cooook coook coook"<<std::endl;
+    }
+
 };
 
 class Manager: public Observable
@@ -39,17 +49,17 @@ class Manager: public Observable
 private:
     std::vector<Observer*> _observers;
 public:
-    virtual void Attach(Observer* observer)
+    virtual void Attach(Observer* observer) override
     {
         _observers.push_back(observer);
     }
 
-    virtual void Detach(Observer* observer)
+    virtual void Detach(Observer* observer) override
     {
         _observers.erase(std::remove(_observers.begin(),_observers.end(),observer),_observers.end());
     }
 
-    virtual void Notify(std::string param)
+    virtual void Notify(std::string param) override
     {
         for(std::vector<Observer*>::const_iterator iter = _observers.begin(); iter != _observers.end(); ++iter)
         {
@@ -79,6 +89,11 @@ int main() {
     manager.Detach(waitress);
 
     manager.Notify("Pong!");
+
+    Cook* cook = new Cook();
+    manager.Attach(cook);
+
+    manager.Notify("Booo!");
 
 
     return 0;
